@@ -24,7 +24,8 @@ cmake --build build -- test # run unit tests
 
 there are also the following options you can set when generating the build files:
 ```
--DENABLE_TESTS=[ON/OFF] # enable or disable testing. default is `ON`
+-DHECK_ENABLE_TESTS=[ON/OFF]    # enable or disable testing. default is `ON`
+-DHECK_MODULE_MEMORY=[ON/OFF]   # include the memory module. default is `ON`
 ```
 
 **TODO: how to link it to your project lmao**
