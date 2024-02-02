@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.11)
+include(FetchContent)
 
-#### project config ####
-
-project             (heck VERSION 0.1)
+project             (heck VERSION 0.1 LANGUAGES C)
 set                 (CMAKE_C_STANDARD 17)
 add_compile_options (-Wall -Wextra -pedantic)
 
-set     (CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(options.cmake)
 
 # check if we've been included as a dependency or not
 if ("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -18,18 +17,26 @@ endif()
 if (HECK_IS_MAIN)
     # only need compilation db if we're actively working on the project
     set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
+
+    if (HECK_ENABLE_TESTS)
+        include(CTest)
+
+        FetchContent_Declare(
+            unity
+            GIT_REPOSITORY  https://github.com/ThrowTheSwitch/Unity.git
+            GIT_TAG         v2.5.2
+        )
+        message(STATUS "fetching unity...")
+        FetchContent_MakeAvailable(Unity) # wait until we have unity downloaded
+        message(STATUS "done!")
+    endif()
 endif()
 
-#### project files ####
+# add the library code
+add_subdirectory(src ${PROJECT_NAME})
 
-file    (GLOB_RECURSE HECK_CORE_LIB_SOURCES src/*.c)
-set     (HECK_CORE_LIB_INCLUDE src/)
-
-# TODO: optional modules
-set     (HECK_LIB_SOURCES ${HECK_CORE_LIB_SOURCES})
-set     (HECK_LIB_INCLUDE ${HECK_CORE_LIB_INCLUDE})
-
-#### targets ####
-
-add_library             (${PROJECT_NAME} ${HECK_LIB_SOURCES})
+# add tests to build
+if (HECK_IS_MAIN AND HECK_ENABLE_TESTS)
+    include(unit_tests.cmake)
+endif()
 

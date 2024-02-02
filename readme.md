@@ -15,7 +15,19 @@ some big library to fit everyone's needs, but if you find use in it then i'm rea
 
 ## usage
 
-TODO
+you will need `cmake` to build heck. here's a list of commands you'll need to know:
+```
+cmake -B build              # generate build files to directory `/build`
+cmake --build build         # build heck
+cmake --build build -- test # run unit tests
+```
+
+there are also the following options you can set when generating the build files:
+```
+-DENABLE_TESTS=[ON/OFF] # enable or disable testing. default is `ON`
+```
+
+**TODO: how to link it to your project lmao**
 
 ## features
 
